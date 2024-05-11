@@ -1,5 +1,5 @@
-import { JsonApiSuccessfulResponse } from '@skywise-app/types';
-import { customAxios as axios } from '../axios/index.js';
+import * as axios from '../axios';
+import { SuccessApiResponse } from '../types/api';
 
 // ====================
 
@@ -22,11 +22,9 @@ export interface ApiComment {
     image: string; // 附件图片
 }
 
-export interface ApiResComments extends JsonApiSuccessfulResponse {
-    data: {
-        comments: ApiComment[];
-    };
-}
+export type ApiResComments = SuccessApiResponse<{
+    comments: ApiComment[];
+}>;
 
 /**
  * 处理原生数据后产生的二次数据
@@ -130,7 +128,7 @@ export async function loadComments(options: LoadOptions): Promise<Comment[]> {
         url += `&pageSize=${pageSize}`;
 
         const { data } = await axios.get<ApiResComments>(url, {
-            cacheTtl: options.useProxy ? 1800 : 0,
+            cacheTTL: options.useProxy ? 1800 : 0,
         });
 
         let transferedData: Comment[] = [];

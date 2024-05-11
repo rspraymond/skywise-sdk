@@ -1,5 +1,5 @@
-import { JsonApiSuccessfulResponse } from '@skywise-app/types';
-import { customAxios as axios } from '../axios/index.js';
+import * as axios from '../axios';
+import { SuccessApiResponse } from '../types/api';
 
 // ====================
 
@@ -8,24 +8,25 @@ const API_PROXY = 'https://cache-proxy.lemonapi.com/skywise/rating/v1';
 
 // ====================
 
-export interface ApiResRatings extends JsonApiSuccessfulResponse {
-    data: Record<
+export type ApiResRatings = SuccessApiResponse<
+    Record<
         string,
         {
             count: number;
             rating: string;
         }
-    >;
-}
+    >
+>;
 
 // ====================
 
-export async function loadRatings(collection: string, ids: string[], proxyTtl = 300) {
+export async function loadRatings(collection: string, ids: string[], proxyTTL = 300) {
     try {
         const { data } = await axios.get<ApiResRatings>(
-            `${proxyTtl ? API_PROXY : API}?action=load&ttl=${proxyTtl}&collection=${collection}&keys=${ids.join(',')}`,
-            { cacheTtl: 3600 }
+            `${proxyTTL ? API_PROXY : API}?action=load&ttl=${proxyTTL}&collection=${collection}&keys=${ids.join(',')}`,
+            { cacheTTL: 3600 }
         );
+
         return data.data;
     } catch (e) {
         console.error('Failed to load ratings:', e);

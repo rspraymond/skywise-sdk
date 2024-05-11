@@ -1,4 +1,4 @@
-import { kvdb } from '../src';
+import { kvdb } from '../../src';
 
 describe('kvdb', () => {
     beforeAll(() => {
